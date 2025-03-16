@@ -1,0 +1,56 @@
+﻿using Catalog.Products.Events;
+using Shared.Domain;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Catalog.Products.Models
+{
+    public class Product : Aggregate<Guid>
+    {
+        public string Name { get; private set; } = default!;
+        public List<string> Categories { get; private set; } = new();
+        public string? Description { get; private set; }
+        public string? ImageFile { get; private set; }
+        public decimal Price { get; private set; }
+
+        public static Product Create(Guid id, string name, List<string> categories, string description, string imageFile, decimal price)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(name);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+
+            Product product = new()
+            {
+                Id = id,
+                Name = name,
+                Categories = categories,
+                Description = description,
+                ImageFile = imageFile,
+                Price = price
+            };
+
+            product.AddDomainEvent(new ProductCreatedEvent(product));
+            return product;
+        }
+
+        public void Update(string name, List<string> categories, string description, string imageFile, decimal price)
+        {
+            ArgumentException.ThrowIfNullOrEmpty(name);
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
+
+            Name = name;
+            Categories = categories;
+            Description = description;
+            ImageFile = imageFile;
+            Price = price;
+
+            if(Price != price)
+            {
+                Price = price;  
+                AddDomainEvent(new ProductPriceChangedEvent(this));
+            }
+        }
+    }
+}
