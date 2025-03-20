@@ -1,11 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalog
 {
@@ -13,6 +8,17 @@ namespace Catalog
     {
         public static IServiceCollection AddCatalogModule(this IServiceCollection services, IConfiguration configuration)
         {
+            // Add services to the container
+
+            // Api endpoint services
+
+            // Application use case services
+
+            // Data - Infrastructure services
+            string connectionString = configuration.GetConnectionString("eShopDbCon")!;
+            services.AddDbContext<CatalogDbContext>(options =>
+                options.UseNpgsql(connectionString));
+
             return services;
         }
 
