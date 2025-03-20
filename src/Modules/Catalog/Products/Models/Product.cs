@@ -8,7 +8,7 @@
         public string? ImageFile { get; private set; }
         public decimal Price { get; private set; }
 
-        public static Product Create(Guid id, string name, List<string> categories, string description, string imageFile, decimal price)
+        public static Product Create(Guid id, string name, List<string> categories, string? description, string? imageFile, decimal price)
         {
             ArgumentException.ThrowIfNullOrEmpty(name);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
@@ -27,7 +27,7 @@
             return product;
         }
 
-        public void Update(string name, List<string> categories, string description, string imageFile, decimal price)
+        public void Update(string name, List<string> categories, string? description, string? imageFile, decimal price)
         {
             ArgumentException.ThrowIfNullOrEmpty(name);
             ArgumentOutOfRangeException.ThrowIfNegativeOrZero(price);
