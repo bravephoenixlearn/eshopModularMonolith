@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Shared.Data;
-using System.Diagnostics;
 
 namespace Catalog
 {
@@ -20,6 +18,8 @@ namespace Catalog
             string connectionString = configuration.GetConnectionString("eShopDbCon")!;            
             services.AddDbContext<CatalogDbContext>(options =>
                 options.UseNpgsql(connectionString));
+
+            services.AddScoped<IDataSeeder, CatalogDataSeeder>();
 
             return services;
         }
