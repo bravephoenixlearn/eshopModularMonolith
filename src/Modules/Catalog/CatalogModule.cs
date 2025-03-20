@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Data;
+using System.Diagnostics;
 
 namespace Catalog
 {
@@ -15,7 +17,7 @@ namespace Catalog
             // Application use case services
 
             // Data - Infrastructure services
-            string connectionString = configuration.GetConnectionString("eShopDbCon")!;
+            string connectionString = configuration.GetConnectionString("eShopDbCon")!;            
             services.AddDbContext<CatalogDbContext>(options =>
                 options.UseNpgsql(connectionString));
 
@@ -24,6 +26,15 @@ namespace Catalog
 
         public static IApplicationBuilder UseCatalogModule(this IApplicationBuilder app)
         {
+            // Configure the HTTP request pipeline
+
+            // 1. Use Api endpoint services
+
+            // 2. Use Application use case services
+
+            // 3. Data - Infrastructure services
+            app.UseMigration<CatalogDbContext>();
+
             return app;
         }
     }
