@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Shared.Data.Interceptors;
 
 namespace Catalog
 {
@@ -13,11 +15,22 @@ namespace Catalog
             // Api endpoint services
 
             // Application use case services
+            services.AddMediatR(config =>
+            {
+                config.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly());
+            });
 
             // Data - Infrastructure services
-            string connectionString = configuration.GetConnectionString("eShopDbCon")!;            
-            services.AddDbContext<CatalogDbContext>(options =>
-                options.UseNpgsql(connectionString));
+            string connectionString = configuration.GetConnectionString("eShopDbCon")!;
+
+            services.AddScoped<ISaveChangesInterceptor, AuditableEntityInterceptor>();
+            services.AddScoped<ISaveChangesInterceptor, DispatchDomainEventInterceptor>();
+
+            services.AddDbContext<CatalogDbContext>((sp, options) =>
+            {
+                options.AddInterceptors(sp.GetService<ISaveChangesInterceptor>()!);
+                options.UseNpgsql(connectionString);
+            });
 
             services.AddScoped<IDataSeeder, CatalogDataSeeder>();
 
