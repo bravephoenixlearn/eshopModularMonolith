@@ -16,11 +16,11 @@
 
             UpdateProductWithNewValues(product, command.Product);
             dbContext.Products.Update(product);
-            await dbContext.SaveChangesAsync();
+            await dbContext.SaveChangesAsync(cancellationToken);
             return new UpdateProductResult(true);
         }
 
-        private void UpdateProductWithNewValues(Product product, ProductDto productDto)
+        private static void UpdateProductWithNewValues(Product product, ProductDto productDto)
         {
             product.Update(productDto.Name, productDto.Categories, productDto.Description, productDto.ImageFile, productDto.Price);
         }

@@ -1,6 +1,12 @@
+using Carter;
+using Shared.Extentions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the DI container
+
+builder.Services.AddCarterWithAssemblies(typeof(CatalogModule).Assembly);
+
 builder.Services
     .AddBasketModule(builder.Configuration)
     .AddCatalogModule(builder.Configuration)
@@ -9,6 +15,9 @@ builder.Services
 var app = builder.Build();
 
 // Configure the HTTP request pipeline
+
+app.MapCarter();
+
 app
     .UseBasketModule()
     .UseCatalogModule()
