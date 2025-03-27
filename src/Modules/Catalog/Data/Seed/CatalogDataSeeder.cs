@@ -10,7 +10,6 @@
                 await catalogDbContext.Products.AddRangeAsync(ProductSeedData());
                 await catalogDbContext.SaveChangesAsync();
             }
-            ProductSeedData();
         }
 
         private static IEnumerable<Product> ProductSeedData()

@@ -36,7 +36,6 @@
             Categories = categories;
             Description = description;
             ImageFile = imageFile;
-            Price = price;
 
             if(Price != price)
             {
